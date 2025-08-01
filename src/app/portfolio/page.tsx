@@ -23,7 +23,7 @@ const projects = [
     title: "E-commerce Ad Campaign",
     description: "Managed a multi-platform ad campaign for a fashion retailer, achieving a 5.2x return on ad spend (ROAS) during the holiday season.",
     image: "https://placehold.co/600x400.png",
-    data_ai_hint: "fashion product",
+    data_ai_hint: "online shopping",
     tags: ["Facebook Ads", "Google Ads"],
     liveUrl: "#",
   },
