@@ -1,5 +1,5 @@
-# Firebase Studio
+# LeadFlow Agency
 
-This is a NextJS starter in Firebase Studio.
+This is a Next.js project for LeadFlow Agency, a modern service agency.
 
-To get started, take a look at src/app/page.tsx.
+Built with Next.js, Tailwind CSS, and Firebase. Features AI-powered lead routing.
