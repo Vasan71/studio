@@ -1,3 +1,4 @@
+
 "use server";
 
 import { routeLead } from "@/ai/flows/lead-router";
@@ -25,6 +26,7 @@ export async function getLeadRouting(prevState: any, formData: FormData) {
     return { message: 'success', data: result, errors: undefined };
   } catch (error) {
     console.error("AI routing failed:", error);
-    return { message: 'error', data: null, errors: { _form: ['The AI service failed to process the request.'] } };
+    const fieldErrors: Record<string, string[]> = { _form: ['The AI service failed to process the request.'] };
+    return { message: 'error', data: null, errors: fieldErrors };
   }
 }

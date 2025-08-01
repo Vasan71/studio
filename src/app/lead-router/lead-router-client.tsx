@@ -1,7 +1,8 @@
+
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
-import { useEffect, useRef } from "react";
+import { useActionState, useEffect, useRef } from "react";
+import { useFormStatus } from "react-dom";
 import { getLeadRouting } from "./actions";
 
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,7 @@ function SubmitButton() {
 }
 
 export function LeadRouterClient() {
-  const [state, formAction] = useFormState(getLeadRouting, { message: "", data: null });
+  const [state, formAction] = useActionState(getLeadRouting, { message: "", data: null, errors: undefined });
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
