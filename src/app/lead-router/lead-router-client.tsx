@@ -21,14 +21,18 @@ function SubmitButton() {
 }
 
 export function LeadRouterClient() {
-  const [state, formAction] = useActionState(getLeadRouting, { message: "", data: null, errors: undefined });
+  const [state, formAction, isPending] = useActionState(getLeadRouting, { message: "", data: null, errors: undefined });
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (state?.message === "success") {
+    if (state.message === "success") {
       formRef.current?.reset();
     }
-  }, [state]);
+  }, [state.message]);
+
+  const hasErrors = state.message === 'error';
+  const hasData = state.message === 'success' && state.data;
+  const showPlaceholder = !isPending && !hasData && !hasErrors;
 
   return (
     <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -59,7 +63,13 @@ export function LeadRouterClient() {
           <CardDescription>AI-powered suggestions will appear here.</CardDescription>
         </CardHeader>
         <CardContent>
-          {state?.message === "success" && state.data && (
+          {isPending && (
+             <div className="text-center text-muted-foreground py-10 flex items-center justify-center">
+                <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+                <p>Analyzing...</p>
+             </div>
+          )}
+          {hasData && (
             <div className="space-y-4">
               <Alert>
                 <Users className="h-4 w-4" />
@@ -76,18 +86,13 @@ export function LeadRouterClient() {
               </div>
             </div>
           )}
-          {state?.message === 'error' && state.errors?.requestContent && (
-             <div className="text-center text-muted-foreground py-10">
-                <p>Results will be displayed here.</p>
-             </div>
-          )}
-           {state?.message === 'error' && state.errors?._form && (
+          {hasErrors && state.errors?._form && (
             <Alert variant="destructive">
                 <AlertTitle>Error</AlertTitle>
                 <AlertDescription>{state.errors._form[0]}</AlertDescription>
             </Alert>
           )}
-          {!state?.data && state?.message !== 'error' && (
+          {showPlaceholder && (
              <div className="text-center text-muted-foreground py-10">
                 <p>Results will be displayed here.</p>
              </div>
