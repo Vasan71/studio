@@ -40,19 +40,24 @@ const prompt = ai.definePrompt({
   output: {schema: RouteLeadOutputSchema},
   prompt: `You are an AI assistant responsible for routing new lead requests to the appropriate team members.
 
-  Analyze the lead request content and identify relevant keywords related to our services, such as 'Facebook Ads,' 'Google My Business,' 'AI automation,' 'website creation', etc.
+  Your task is to analyze the lead request content, identify the services required, and based on those services, recommend the most suitable team members.
 
-  Based on the identified keywords, recommend the team members who are best suited to handle the request. Provide a brief explanation for each recommendation.
+  ## Team Members and Specializations:
+  - John: Specializes in Facebook Ads and Google Ads.
+  - Jane: Specializes in Google My Business (GMB) and SEO.
+  - Alice: Specializes in Website Creation and Design.
+  - Bob: Specializes in AI Automation and Chat Automation.
 
-  Team Members:
-  - John (Facebook Ads, Google Ads)
-  - Jane (Google My Business, SEO)
-  - Alice (Website Creation, Design)
-  - Bob (AI Automation, Chat Automation)
+  ## Instructions:
+  1.  Read the "Request Content" carefully.
+  2.  Identify the key services the user is asking for (e.g., 'Facebook Ads', 'website creation').
+  3.  Match the identified services to the team members' specializations.
+  4.  Provide your response as a JSON object that strictly follows the output schema.
+  5.  The 'recommendedTeamMembers' array should contain the names of the matched team members.
+  6.  The 'reasoning' field should explain *why* you chose those team members based on the request.
 
-  Request Content: {{{requestContent}}}
-
-  Respond with a JSON object that conforms to the output schema.
+  ## Request Content:
+  {{{requestContent}}}
   `,
 });
 
