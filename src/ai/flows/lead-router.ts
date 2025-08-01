@@ -52,7 +52,7 @@ const prompt = ai.definePrompt({
 
   Request Content: {{{requestContent}}}
 
-  Output in JSON format:
+  Respond with a JSON object that conforms to the output schema.
   `,
 });
 

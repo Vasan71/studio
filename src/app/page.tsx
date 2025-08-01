@@ -43,21 +43,21 @@ const testimonials = [
   {
     name: "Sarah Johnson",
     title: "CEO, Tech Innovators",
-    avatar: "https://placehold.co/100x100/EBF4FF/2E90FA?text=SJ",
+    avatar: "https://placehold.co/100x100.png",
     data_ai_hint: "woman portrait",
     quote: "LeadFlow Agency's AI automation saved us 20 hours a week. Their team is brilliant and the results speak for themselves. An absolute game-changer for our business!",
   },
   {
     name: "Michael Chen",
     title: "Marketing Director, StyleCo",
-    avatar: "https://placehold.co/100x100/EBF4FF/2E90FA?text=MC",
+    avatar: "https://placehold.co/100x100.png",
     data_ai_hint: "man portrait",
     quote: "The new website they built for us is not only beautiful but also incredibly fast. Our conversion rates have doubled since the launch. Highly recommended!",
   },
   {
     name: "Emily Rodriguez",
     title: "Founder, Fresh Eats",
-    avatar: "https://placehold.co/100x100/EBF4FF/2E90FA?text=ER",
+    avatar: "https://placehold.co/100x100.png",
     data_ai_hint: "woman portrait",
     quote: "Their Facebook ad campaigns are pure magic. We've seen a 300% ROI and our lead quality has never been better. We couldn't be happier with the results.",
   },
@@ -129,9 +129,9 @@ export default function Home() {
                         <p className="italic">"{testimonial.quote}"</p>
                       </CardContent>
                       <CardHeader className="flex-row items-center gap-4 pt-2">
-                        <Avatar>
+                        <Avatar className="w-16 h-16">
                           <AvatarImage src={testimonial.avatar} data-ai-hint={testimonial.data_ai_hint}/>
-                          <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
+                          <AvatarFallback>{testimonial.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="font-bold">{testimonial.name}</p>
