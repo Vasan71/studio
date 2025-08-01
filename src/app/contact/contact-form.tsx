@@ -1,30 +1,17 @@
 
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useToast } from "@/hooks/use-toast";
 import { handleFormSubmission } from "./actions";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
-
-const contactFormSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  company: z.string().optional(),
-  service: z.string().min(1, { message: "Please select a service." }),
-  message: z.string().min(10, { message: "Message must be at least 10 characters." }),
-});
-
-type ContactFormValues = z.infer<typeof contactFormSchema>;
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -37,117 +24,53 @@ function SubmitButton() {
 
 export function ContactForm() {
   const [state, formAction] = useActionState(handleFormSubmission, { message: "", errors: undefined });
-  const { toast } = useToast();
 
-  const form = useForm<ContactFormValues>({
-    resolver: zodResolver(contactFormSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      company: "",
-      service: "",
-      message: "",
-    },
-  });
-
-  useEffect(() => {
-    if (state?.message === 'success') {
-      toast({
-        title: "Message Sent!",
-        description: "Thanks for reaching out. We'll get back to you shortly.",
-      });
-      form.reset();
-    } else if (state?.message === 'error' && state.errors) {
-        toast({
-            title: "Error",
-            description: "Please check the form for errors.",
-            variant: "destructive",
-        });
-    }
-  }, [state, toast, form]);
-  
   return (
-    <Form {...form}>
-      <form action={formAction} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Full Name</FormLabel>
-              <FormControl>
-                <Input placeholder="John Doe" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email Address</FormLabel>
-              <FormControl>
-                <Input placeholder="you@example.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="company"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Company (Optional)</FormLabel>
-              <FormControl>
-                <Input placeholder="Your Company Inc." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="service"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Service of Interest</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a service" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="lead-generation">Lead Generation</SelectItem>
-                  <SelectItem value="gmb-optimization">GMB Optimization</SelectItem>
-                  <SelectItem value="website-creation">Website Creation</SelectItem>
-                  <SelectItem value="ai-automation">AI & Chat Automation</SelectItem>
-                  <SelectItem value="ai-agents">Custom AI Agents</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="message"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Your Message</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Tell us about your project..." className="min-h-[120px]" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <SubmitButton />
-      </form>
-    </Form>
+    <form action={formAction} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="name">Full Name</Label>
+        <Input id="name" name="name" placeholder="John Doe" />
+        {state.errors?.name && <p className="text-sm font-medium text-destructive">{state.errors.name[0]}</p>}
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="email">Email Address</Label>
+        <Input id="email" name="email" type="email" placeholder="you@example.com" />
+        {state.errors?.email && <p className="text-sm font-medium text-destructive">{state.errors.email[0]}</p>}
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="company">Company (Optional)</Label>
+        <Input id="company" name="company" placeholder="Your Company Inc." />
+        {state.errors?.company && <p className="text-sm font-medium text-destructive">{state.errors.company[0]}</p>}
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="service">Service of Interest</Label>
+        <Select name="service">
+          <SelectTrigger id="service">
+            <SelectValue placeholder="Select a service" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="lead-generation">Lead Generation</SelectItem>
+            <SelectItem value="gmb-optimization">GMB Optimization</SelectItem>
+            <SelectItem value="website-creation">Website Creation</SelectItem>
+            <SelectItem value="ai-automation">AI & Chat Automation</SelectItem>
+            <SelectItem value="ai-agents">Custom AI Agents</SelectItem>
+            <SelectItem value="other">Other</SelectItem>
+          </SelectContent>
+        </Select>
+        {state.errors?.service && <p className="text-sm font-medium text-destructive">{state.errors.service[0]}</p>}
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="message">Your Message</Label>
+        <Textarea id="message" name="message" placeholder="Tell us about your project..." className="min-h-[120px]" />
+        {state.errors?.message && <p className="text-sm font-medium text-destructive">{state.errors.message[0]}</p>}
+      </div>
+      <SubmitButton />
+      {state.message === 'success' && (
+        <Alert>
+            <AlertTitle>Message Sent!</AlertTitle>
+            <AlertDescription>Thanks for reaching out. We'll get back to you shortly.</AlertDescription>
+        </Alert>
+      )}
+    </form>
   );
 }

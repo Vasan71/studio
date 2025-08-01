@@ -8,7 +8,7 @@ import { getLeadRouting } from "./actions";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, User, Users } from "lucide-react";
+import { Loader2, Users } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 function SubmitButton() {
@@ -45,6 +45,7 @@ export function LeadRouterClient() {
               className="min-h-[200px]"
               required
             />
+             {state.errors?.requestContent && <p className="text-sm font-medium text-destructive mt-2">{state.errors.requestContent[0]}</p>}
           </CardContent>
           <CardFooter>
             <SubmitButton />
@@ -75,10 +76,15 @@ export function LeadRouterClient() {
               </div>
             </div>
           )}
-          {state?.message === 'error' && (
+          {state?.message === 'error' && state.errors?.requestContent && (
+             <div className="text-center text-muted-foreground py-10">
+                <p>Results will be displayed here.</p>
+             </div>
+          )}
+           {state?.message === 'error' && state.errors?._form && (
             <Alert variant="destructive">
                 <AlertTitle>Error</AlertTitle>
-                <AlertDescription>{state.errors?.requestContent?.[0] || 'An unknown error occurred.'}</AlertDescription>
+                <AlertDescription>{state.errors._form[0]}</AlertDescription>
             </Alert>
           )}
           {!state?.data && state?.message !== 'error' && (
