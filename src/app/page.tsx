@@ -67,20 +67,32 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       <section className="py-20 md:py-32 bg-card">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="font-headline text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-            Supercharge Your Growth with <span className="text-primary">AI-Powered Marketing</span>
-          </h1>
-          <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            We combine data-driven strategies with cutting-edge AI to deliver real results. Stop guessing, start growing.
-          </p>
-          <div className="mt-8 flex justify-center gap-4">
-            <Button asChild size="lg">
-              <Link href="/contact">Get a Free Quote</Link>
-            </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link href="/services">Our Services</Link>
-            </Button>
+        <div className="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+          <div className="text-center md:text-left">
+            <h1 className="font-headline text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+              Supercharge Your Growth with <span className="text-primary">AI-Powered Marketing</span>
+            </h1>
+            <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto md:mx-0">
+              We combine data-driven strategies with cutting-edge AI to deliver real results. Stop guessing, start growing.
+            </p>
+            <div className="mt-8 flex justify-center md:justify-start gap-4">
+              <Button asChild size="lg">
+                <Link href="/contact">Get a Free Quote</Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link href="/services">Our Services</Link>
+              </Button>
+            </div>
+          </div>
+          <div className="hidden md:block">
+            <Image 
+              src="https://placehold.co/600x400.png"
+              alt="AI-Powered Marketing"
+              data-ai-hint="digital marketing"
+              width={600}
+              height={400}
+              className="rounded-lg shadow-xl"
+            />
           </div>
         </div>
       </section>

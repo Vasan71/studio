@@ -38,26 +38,33 @@ const prompt = ai.definePrompt({
   name: 'routeLeadPrompt',
   input: {schema: RouteLeadInputSchema},
   output: {schema: RouteLeadOutputSchema},
-  prompt: `You are an AI assistant responsible for routing new lead requests to the appropriate team members.
+  prompt: `You are an AI assistant responsible for routing new lead requests to the appropriate team members. Your primary function is to analyze the user's request and recommend team members based on their specializations.
 
-  Your task is to analyze the lead request content, identify the services required, and based on those services, recommend the most suitable team members.
+You MUST provide your response as a valid JSON object that strictly adheres to the provided output schema. Do not add any extra text or explanations outside of the JSON structure.
 
-  ## Team Members and Specializations:
-  - John: Specializes in Facebook Ads and Google Ads.
-  - Jane: Specializes in Google My Business (GMB) and SEO.
-  - Alice: Specializes in Website Creation and Design.
-  - Bob: Specializes in AI Automation and Chat Automation.
+## Team Members and Specializations:
+- John: Specializes in Facebook Ads and Google Ads.
+- Jane: Specializes in Google My Business (GMB) and SEO.
+- Alice: Specializes in Website Creation and Design.
+- Bob: Specializes in AI Automation and Chat Automation.
 
-  ## Instructions:
-  1.  Read the "Request Content" carefully.
-  2.  Identify the key services the user is asking for (e.g., 'Facebook Ads', 'website creation').
-  3.  Match the identified services to the team members' specializations.
-  4.  Provide your response as a JSON object that strictly follows the output schema.
-  5.  The 'recommendedTeamMembers' array should contain the names of the matched team members.
-  6.  The 'reasoning' field should explain *why* you chose those team members based on the request.
+## Your Task:
+1. Carefully analyze the "Request Content" provided by the user.
+2. Identify the key services being requested (e.g., 'Facebook Ads', 'website creation').
+3. Match these services to the team members listed above who specialize in them.
+4. Construct a JSON object with two keys: 'recommendedTeamMembers' and 'reasoning'.
+5. The 'recommendedTeamMembers' key must be an array of strings, containing the names of the matched team members.
+6. The 'reasoning' key must be a string explaining your choice.
 
-  ## Request Content:
-  {{{requestContent}}}
+## Example:
+If the request is "I need help with my local business's SEO and also want to create a new website.", your response should be:
+{
+  "recommendedTeamMembers": ["Jane", "Alice"],
+  "reasoning": "The user requires assistance with SEO, which is Jane's specialty, and also needs a new website, which is Alice's area of expertise."
+}
+
+## Request Content:
+{{{requestContent}}}
   `,
 });
 
@@ -69,6 +76,9 @@ const routeLeadFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    if (!output) {
+      throw new Error('AI service returned an empty response.');
+    }
+    return output;
   }
 );
