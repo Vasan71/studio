@@ -23,10 +23,16 @@ export async function getLeadRouting(prevState: any, formData: FormData) {
 
   try {
     const result = await routeLead({ requestContent: validatedFields.data.requestContent });
+    
+    // Add a null check for the result from the AI
+    if (!result) {
+        throw new Error("AI service returned an empty response.");
+    }
+
     return { message: 'success', data: result, errors: undefined };
   } catch (error) {
     console.error("AI routing failed:", error);
-    const fieldErrors: Record<string, string[]> = { _form: ['The AI service failed to process the request.'] };
+    const fieldErrors: Record<string, string[]> = { _form: ['The AI service failed to process the request. Please try again.'] };
     return { message: 'error', data: null, errors: fieldErrors };
   }
 }
